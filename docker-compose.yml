@@ -1,0 +1,39 @@
+
+version: "2"
+
+services:
+  flask:
+    image: unocha/alpine-base-python3
+    container_name: fun-flask
+    hostname: fun-flask
+    volumes:
+      - "./app:/opt"
+    environment:
+      - FLASK_APP=/opt/app.py
+    entrypoint:
+      - "/opt/runapp.sh"
+    ports:
+      - "0.0.0.0:5000:5000"
+    networks:
+      - dbnet
+      - default
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    hostname: mongo
+    #ports:
+    #  - "0.0.0.0:27017:27017"
+    volumes:
+      - "./db:/srv/db"
+      - "./db:/opt"
+    #entrypoint:
+    #  - "/opt/db.sh"
+    networks:
+      dbnet:
+        aliases:
+          - mongos
+          - mongo.fun.net
+
+networks:
+  dbnet:
