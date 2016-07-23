@@ -1,6 +1,19 @@
+<style>
+  input, label {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    display: inline-block;
+  }
+</style>
 <form action="/new" method="POST">
+  <label id="name">Name</label>
+  <br />
   <input type="text" name="name"></input>
+  <br />
+  <label id="description">Description</label>
+  <br />
   <input type="text" name="description"></input>
+  <br />
   <input type="submit"></input>
 </form>
 

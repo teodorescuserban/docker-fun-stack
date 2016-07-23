@@ -12,28 +12,40 @@ services:
       - FLASK_APP=/opt/app.py
     entrypoint:
       - "/opt/runapp.sh"
-    ports:
-      - "0.0.0.0:5000:5000"
     networks:
-      - dbnet
-      - default
+      dbnet:
+      appnet:
+        aliases:
+          - app
 
   mongo:
-    image: mongo
+    image: unocha/alpine-mongo
     container_name: mongo
     hostname: mongo
-    #ports:
-    #  - "0.0.0.0:27017:27017"
     volumes:
       - "./db:/srv/db"
       - "./db:/opt"
-    #entrypoint:
-    #  - "/opt/db.sh"
     networks:
-      dbnet:
+      - dbnet
+
+  web:
+    image: unocha/alpine-nginx-extras
+    build: .
+    container_name: web
+    hostname: web
+    ports:
+      - "0.0.0.0:80:80"
+    volumes:
+      - "./app:/srv/www/html"
+      - "./web:/etc/nginx/conf.d"
+    networks:
+      default:
         aliases:
-          - mongos
-          - mongo.fun.net
+          - web.fun.net
+      appnet:
+        aliases:
+          - gw.fun.net
 
 networks:
   dbnet:
+  appnet:
